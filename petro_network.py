@@ -21,16 +21,16 @@ print(os.getcwd())
 '---             PIB municipal atualizado                 ---'
 '------------------------------------------------------------'
 
-#with open('quakers_nodelist.csv', 'r') as nodecsv: 
-#    nodereader = csv.reader(nodecsv) 
-#    nodes = [n for n in nodereader][1:]
+with open('petro_nodelist.csv', 'r') as nodecsv: # Open the file
+    nodereader = csv.reader(nodecsv) # Read the csv
+    nodesx = [n for n in nodereader][1:]
 
-nodes = pd.read_excel('network petro.xlsx',sheet_name='net') 
+#nodesx = pd.read_excel('network petro.xlsx',sheet_name='net') 
 
 
 #%% 
 
-node_names = [n[0] for n in nodes] 
+node_namesx = [n[0] for n in nodesx] 
 
 #%% 
 
@@ -38,20 +38,20 @@ node_names = [n[0] for n in nodes]
 #    edgereader = csv.reader(edgecsv) 
 #    edges = [tuple(e) for e in edgereader][1:] 
 
-edges = pd.read_excel('network petro.xlsx',sheet_name='id') 
+edgesx = pd.read_excel('network petro.xlsx',sheet_name='id') 
 
 
 #%% 
-print(len(node_names))
+print(len(node_namesx))
 
-print(len(edges))
+print(len(edgesx))
 
 
 #%% 
 
 G = nx.Graph()
-G.add_nodes_from(node_names)
-G.add_edges_from(edges)
+G.add_nodes_from(node_namesx)
+G.add_edges_from(edgesx)
 
 
 #%% 

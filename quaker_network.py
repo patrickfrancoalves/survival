@@ -24,7 +24,6 @@ with open('quakers_nodelist.csv', 'r') as nodecsv: # Open the file
     nodereader = csv.reader(nodecsv) # Read the csv
     nodes = [n for n in nodereader][1:]
 
-
 # C:\Users\patrick\OneDrive\Documentos\GitHub\survival
 
 #%% 
