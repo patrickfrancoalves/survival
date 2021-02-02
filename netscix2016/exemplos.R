@@ -10,22 +10,13 @@ library(ggplot2)
 library(GGally)
 library(tidyverse)
 
-edge_list <- tibble(from = c(1, 2, 2, 3, 4), to = c(2, 3, 4, 2, 1))
-node_list <- tibble(id = 1:4)
-
-edge_list
-node_list
-
-
 
 # C:\Users\patrick\OneDrive\Documentos\GitHub\survival\netscix2016
-#ls()
-# getwd()
 # Creating edge and node lists
 
 setwd("C:/Users/patrick/OneDrive/Documentos/GitHub/survival/netscix2016")
 
-letters<- read_csv("correspondence-data-1585.csv")
+letters <- read_csv("correspondence-data-1585.csv")
 
 letters
 
@@ -44,8 +35,9 @@ nodes
 nodes <- nodes %>% rowid_to_column("id")
 nodes
 
-
-# Edge list
+#--------------------------------------------------#
+#---                  Edge list                 ---#
+#--------------------------------------------------#
 
 per_route <- letters %>% group_by(source, destination) %>% summarise(weight = n()) %>% ungroup()
 
@@ -65,7 +57,10 @@ plot(routes_network, vertex.cex = 3)
 plot(routes_network, vertex.cex = 3, mode = "circle")
 
 
-#igraph
+#--------------------------------------------------#
+#---                Usando igraph               ---#
+#--------------------------------------------------#
+
 detach(package:network)
 rm(routes_network)
 library(igraph)
@@ -75,9 +70,10 @@ plot(routes_igraph, edge.arrow.size = 0.2)
 plot(routes_igraph, layout = layout_with_graphopt, edge.arrow.size = 0.2)
 
 
-# tidygraph and ggraph
-#to bring network analysis into the tidyverse workflow. 
-#install.packages("ggraph")
+#--------------------------------------------------#
+#---         Usando tidygraph e ggraph          ---#
+#---   OBS: network analysis into tidyverse     ---#
+#--------------------------------------------------#
 
 library(tidygraph)
 library(ggraph)
@@ -86,9 +82,7 @@ routes_tidy <- tbl_graph(nodes = nodes, edges = edges, directed = TRUE)
 
 routes_igraph_tidy <- as_tbl_graph(routes_igraph)
 
-class(routes_tidy)
-
-class(routes_igraph_tidy)
+#class(routes_tidy)
 
 routes_tidy %>% activate(edges) %>% arrange(desc(weight))
 
@@ -99,11 +93,10 @@ ggraph(routes_tidy, layout = "graphopt") + geom_node_point() +
   labs(edge_width = "Letters") + theme_graph()
 
 
-
-# Interactive network graphs with visNetwork and networkD3
-#install.packages("visNetwork")
-#install.packages("networkD3")
-
+#--------------------------------------------------#
+#---   Network with visNetwork and networkD3    ---#
+#---   OBS: network analysis into tidyverse     ---#
+#--------------------------------------------------#
 
 library(visNetwork)
 library(networkD3)
@@ -114,8 +107,6 @@ edges <- mutate(edges, width = weight/5 + 1)
 
 
 visNetwork(nodes, edges) %>% visIgraphLayout(layout = "layout_with_fr") %>% visEdges(arrows = "middle")
-
-# networkD3
 
 nodes_d3 <- mutate(nodes, id = id - 1)
 edges_d3 <- mutate(edges, from = from - 1, to = to - 1)
