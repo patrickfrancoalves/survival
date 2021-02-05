@@ -1,12 +1,37 @@
 #remove(nodes_d3,per_route) 
+#rm(list = ls()) 
 library(igraph) 
-
+library(dplyr)
+library(tidyverse)
 
 # Modificando local da biblioteca
 
-petro <- read.csv("~/GitHub/survival/redes/network petro topografia.csv", sep=";")
+petro  <- read.csv("~/GitHub/survival/redes/network petro topografia.csv", sep=";")
+trats  <- read.csv("~/GitHub/survival/redes/network petro.csv", encoding="UTF-8", sep=";")
+trats2 <- trats %>% filter(PETRO_PETRO==1) %>% select(c("ArquivoXML"))
 
-names(petro)
+table(trats$PETRO_PETRO)
+table(trats$PETRO_LATTES)
+table(trats$CENPES_LATTES)
+table(trats$PETRO_LAB)
+table(trats$ANP_LATTES)
+table(trats$ANP_ANP)
+
+petro2 <- inner_join(  trats , petro , by = "ArquivoXML")
+
+petro2 <- inner_join( petro , trats %>% filter(PETRO_PETRO==1) %>% select(c("ArquivoXML")) , by = "ArquivoXML")
+petro2 <- inner_join( petro , trats %>% filter(PETRO_PETRO==1) %>% select(c("ArquivoXML")) , by = "ArquivoXML")
+petro2 <- inner_join( petro , trats %>% filter(PETRO_PETRO==1) %>% select(c("ArquivoXML")) , by = "ArquivoXML")
+petro2 <- inner_join( petro , trats %>% filter(PETRO_PETRO==1) %>% select(c("ArquivoXML")) , by = "ArquivoXML")
+petro2 <- inner_join( petro , trats %>% filter(PETRO_PETRO==1) %>% select(c("ArquivoXML")) , by = "ArquivoXML")
+
+
+
+#trats[ which(trats$PETRO_PETRO==1),c("ArquivoXML")]
+
+
+
+names(trats)
 
 fonte   <- petro %>% distinct(ArquivoXML) %>% rename(label = ArquivoXML)
 destino <- petro %>% distinct(ID_CNPQ) %>% rename(label = ID_CNPQ)
