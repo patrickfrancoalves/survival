@@ -1,0 +1,57 @@
+
+Pointofix 1.5 - der virtuelle Textmarker für Ihren Bildschirm!
+---------------------------------------------------------------
+Installationsdatei: setup-pointofix.exe
+System: PC ab Pentium 133, Windows 95/98/NT/2000/Me/XP/Vista,
+Farbqualität mindestens 16 Bit (High Color oder True Color)
+---------------------------------------------------------------
+
+Pointofix ist ein virtueller Textmarker für Ihren Bildschirm zur
+Unterstützung Ihrer Vorträge, Schulungen und Präsentationen.
+
+Mit diesem Werkzeug kann jeder Bildschirminhalt als digitale
+Zeichenfläche verfügbar gemacht werden, so dass Sie Wichtiges
+markieren und hervorheben können.
+
+Somit ist Pointofix ideal für Sie als Lehrer oder IT-Trainer
+zur Unterstützung Ihrer Vorträge, Schulungen und Präsentationen.
+
+Auf Knopfdruck friert Pointofix den aktuellen Bildschirminhalt
+ein und stellt eine Reihe praktischer Markierungs- und
+Zeichenwerkzeuge in verschiedenen Farben und Größen zur
+Verfügung: Freihand-Stift, Linie, Pfeil, Rechteck, Ellipse,
+Texteingabe, Häkchen und einige mehr.
+
+Die Lupe und die mehrstufige Zoomansicht des gesamten
+Bildschirms sind weitere nützliche Funktionen.
+
+Pointofix funktioniert mit praktisch jedem Windows-
+Anwendungsprogramm. Präsentationen erscheinen somit
+eindrucksvoller und werden vom Publikum besser aufgenommen.
+
+Darüber hinaus kann der Bildschirminhalt - wahlweise auch ein
+Teilbereich - gedruckt, in die Zwischenablage kopiert oder als
+Grafikdatei abgespeichert werden.
+
+Weitere Informationen zu Pointofix im Internet unter:
+http://www.pointofix.de
+
+Download:
+http://www.pointofix.de/download.php
+
+---------------------------------------------------------------
+Pointofix ist 'Freeware', d.h. Sie dürfen das Programm für
+private und geschäftliche Zwecke frei verwenden und kostenlos
+weitergeben.
+Bei Weitergabe als Teil kommerzieller Software ist eine
+Genehmigung erforderlich.
+---------------------------------------------------------------
+
+Copyright (C) 2009 Thomas Gottfried
+Alle Rechte vorbehalten.
+
+Thomas Gottfried EDV
+Postfach 10 24 67 / 69014 Heidelberg / Deutschland
+Tel.: 0180-3-684-314-963 / Fax: 0180-3-684-314-601
+Internet: www.pointofix.de
+E-Mail: info@pointofix.de
