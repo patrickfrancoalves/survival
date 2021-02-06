@@ -1,0 +1,50 @@
+proc hpforest data=sashelp.cars
+maxtrees= 500 vars_to_try=4
+seed=600 trainfraction=0.6
+maxdepth=50 leafsize=6
+alpha= 0.1;
+target MPG_City/ level=interval;
+input cylinders wheelbase enginesize weight length
+ horsepower/ level=interval;
+ods output fitstatistics = fit;
+run;
+
+
+data output;
+   call streaminit(54321);
+   do i=1 to 10000;
+      x1 = rand('normal', 0, 1);
+      x2 = rand('normal', 0, 1);
+      x3 = rand('normal', 0, 1);
+      x4 = rand('normal', 0, 1);
+      output;
+   end;
+run;
+
+data cov;
+   input x5-x8;
+   datalines;
+   1 0.9 0.9 0.9
+   0.9 1 0.9 0.9
+   0.9 0.9 1 0.9
+   0.9 0.9 0.9 1
+run;
+
+proc simnormal data=cov(type=cov)
+   out = osim(drop=Rnum)
+   numreal = 10000
+   seed = 54321;
+   var x5-x8;
+run;
+
+data output;
+   merge output osim;
+   y = x1 + x2 + 2*x3 + x5 + x6 + 2*x7;
+run;
+
+proc hpforest data=output vars_to_try=all;
+   input x:/level=interval;
+   target y/level=interval;
+   ods select VariableImportance;
+run;
+
