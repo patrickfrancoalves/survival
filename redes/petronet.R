@@ -6,35 +6,33 @@ library(tidyverse)
 
 # Modificando local da biblioteca
 
-petro  <- read.csv("~/GitHub/survival/redes/network petro topografia.csv", sep=";")
-trats  <- read.csv("~/GitHub/survival/redes/network petro.csv", encoding="UTF-8", sep=";")
-trats2 <- trats %>% filter(PETRO_PETRO==1) %>% select(c("ArquivoXML"))
+netpat  <- read.csv("~/GitHub/survival/redes/network petro topografia.csv", sep=";")
+tratam  <- read.csv("~/GitHub/survival/redes/network petro.csv", encoding="UTF-8", sep=";")
+#trats2  <- trats %>% filter(PETRO_PETRO==1) %>% select(c("ArquivoXML"))
 
-table(trats$PETRO_PETRO)
-table(trats$PETRO_LATTES)
-table(trats$CENPES_LATTES)
-table(trats$PETRO_LAB)
-table(trats$ANP_LATTES)
-table(trats$ANP_ANP)
+table(netpat$PETRO_PETRO)
+table(netpat$PETRO_LATTES)
+table(netpat$CENPES_LATTES)
+table(netpat$PETRO_LAB)
+table(netpat$ANP_LATTES)
+table(netpat$ANP_ANP)
 
-petro2 <- inner_join(  trats , petro , by = "ArquivoXML")
+#petro2 <- inner_join( trats2 , petro , by = "ArquivoXML")
 
-petro2 <- inner_join( petro , trats %>% filter(PETRO_PETRO==1) %>% select(c("ArquivoXML")) , by = "ArquivoXML")
-petro2 <- inner_join( petro , trats %>% filter(PETRO_PETRO==1) %>% select(c("ArquivoXML")) , by = "ArquivoXML")
-petro2 <- inner_join( petro , trats %>% filter(PETRO_PETRO==1) %>% select(c("ArquivoXML")) , by = "ArquivoXML")
-petro2 <- inner_join( petro , trats %>% filter(PETRO_PETRO==1) %>% select(c("ArquivoXML")) , by = "ArquivoXML")
-petro2 <- inner_join( petro , trats %>% filter(PETRO_PETRO==1) %>% select(c("ArquivoXML")) , by = "ArquivoXML")
-
-
-
-#trats[ which(trats$PETRO_PETRO==1),c("ArquivoXML")]
+petro_petro   <- netpat %>% filter(PETRO_PETRO==1) 
+petro_lattes  <- netpat %>% filter(PETRO_LATTES==1) 
+cenpes_lattes <- netpat %>% filter(CENPES_LATTES==1) 
+petro_lab     <- netpat %>% filter(PETRO_PETRO==1) 
+anp_lattes    <- netpat %>% filter(ANP_LATTES==1) 
+anp_anp       <- netpat %>% filter(ANP_ANP==1) 
 
 
 
-names(trats)
 
-fonte   <- petro %>% distinct(ArquivoXML) %>% rename(label = ArquivoXML)
-destino <- petro %>% distinct(ID_CNPQ) %>% rename(label = ID_CNPQ)
+names(petro_petro)
+
+fonte   <- petro_petro %>% distinct(ArquivoXML) %>% rename(label = ArquivoXML)
+destino <- petro_petro %>% distinct(`NRO.ID.CNPQ`) %>% rename(label = `NRO.ID.CNPQ`)
 
 
 # Use full join to create a dataframe with a column with the unique locations.
@@ -51,7 +49,7 @@ nos
 #---                  Edge list                 ---#
 #--------------------------------------------------#
 
-per_rota <- petro %>% group_by(ArquivoXML,ID_CNPQ) %>% summarise(weight = n()) %>% ungroup()
+per_rota <- petro_lapetro %>% group_by(ArquivoXML,`NRO.ID.CNPQ`) %>% summarise(weight = n()) %>% ungroup()
 
 edges <- per_rota %>% left_join(nos, by = c("ArquivoXML" = "label")) %>% rename(from = id)
 edges <- edges %>% left_join(nos, by = c("ArquivoXML" = "label")) %>% rename(to = id)
@@ -59,6 +57,7 @@ edges <- select(edges, from, to, weight)
 edges
 
 # Creating network objects
+#install.packages("network")
 library(network)
 
 routes_network <- network(edges, vertex.attr = nos, matrix.type = "edgelist", ignore.eval = FALSE)
