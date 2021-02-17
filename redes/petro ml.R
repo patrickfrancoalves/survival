@@ -1,20 +1,22 @@
 #-----------------------------------------------------------------------#
-#---            Modelos de Machine Learning e Avaliação PSM          ---#
+#---            Modelos de Machine Learning e AvaliaÃ§Ã£o PSM          ---#
 #-----------------------------------------------------------------------#
-#install.packages("mlbench")
 #install.packages("caret")
+
 options(digits = 3, scipen = 9) 
 library(DBI)
 library(odbc)
 library(dplyr)
 library(mlbench)
 library(caret)
+library(haven)
 
-
-#remove(dataset)
+remove(AI_CENPES_LATTES,AI_PETRO_PETRO,AI_PETRO_LATTES,df,DICT,
+       example.df,example.df1,TRAT_CENPES_LATTES,TRAT_PETRO_PETRO,
+       TRAT_PETRO_LATTES,dicion,x,fn)
 
 #-----------------------------------------------------------------------#
-#---              Passo 01: Conexão ODBC com servidor                ---#
+#---              Passo 01: ConexÃ£o ODBC com servidor                ---#
 #-----------------------------------------------------------------------#
 
 # conectando
@@ -36,24 +38,30 @@ dbDisconnect(con)
 #-----------------------------------------------------------------------#
 #---              Passo 02: Tratamento das variáveis                 ---#
 #-----------------------------------------------------------------------#
-names(tabpetro)
-#glimpse(SCR)
 
-petrox <- tabpetro %>% mutate( PETRO_PETRO    =factor(PETRO_PETRO)           , 
-                                 ANO          =factor(ANO)                   , 
-                                 GRANDE_AREA  =factor(GRANDE_AREA)           , 
-                                 DIRECAO      =factor(DIRECAO)               ,
-                                 VINCULO      =factor(VINCULO)               ,
-                                 CONTINENTE   =factor(CONTINENTE)            ,
-                                 LOCAL_FORMAC =factor(LOCAL_FORMAC)          ,
-                                 SEXO         =factor(SEXO)                  ,
-                                 UF_NASC      =factor(`UF-NASCIMENTO`)       ,
-                                 DEDICACAO    =factor(`DEDICACAO-EXCLUSIVA`) ,
-                                 UF_PROF      =factor(`UF-END-PROFISSIONAL`) ) %>% 
-  select(c('PETRO_PETRO','ANO','GRANDE_AREA','DIRECAO','VINCULO','CONTINENTE','SEXO',
-           'LOCAL_FORMAC','UF_NASC','DEDICACAO','UF_PROF','IDADE_ACADEMICA','NOTA_CAPES'))
 
-#'BANCA','ORIENT','CURSO','PROD_TEC','ARTIGO'
+estaticos <- read_sas("GitHub/survival/redes/estaticos.sas7bdat")
+names(estaticos)
+
+
+estaticos2 <- estaticos %>% mutate(PETRO_PETRO    =factor(PETRO_PETRO)  , 
+                                   PETRO_LATTES   =factor(PETRO_LATTES) , 
+                                   CENPES_LATTES  =factor(CENPES_LATTES), 
+                                   PETRO_LAB      =factor(PETRO_LAB)    , 
+                                   CENPES_LATTES  =factor(CENPES_LATTES), 
+                                   ANP_LATTES     =factor(ANP_LATTES)   , 
+                                   ANP_ANP        =factor(ANP_ANP)      , 
+                                   UF_NASCN       =factor(UF_NASCN)     ,
+                                   LOCAL_FORMACN  =factor(LOCAL_FORMACN),
+                                   GRANDE_AREAN   =factor(GRANDE_AREAN) , 
+                                   DIRECAO        =factor(DIRECAO)      ,
+                                   SEXON          =factor(SEXON)        ,
+                                   VINCULON       =factor(VINCULON) ) %>% 
+  select(c(PETRO_PETRO,PETRO_LATTES,CENPES_LATTES,PETRO_LAB,CENPES_LATTES,
+           ANP_LATTES,ANP_ANP,UF_NASCN,LOCAL_FORMACN,GRANDE_AREAN,DIRECAO,
+           SEXON,VINCULON,LN_IDADE,LN_COAUTOR,LN_LOC_TRAB,LN_CAPES))
+
+
  
 #-----------------------------------------------------------------------#
 #---              Passo 03: Prepare the Training scheme              ---#
@@ -63,36 +71,61 @@ petrox <- tabpetro %>% mutate( PETRO_PETRO    =factor(PETRO_PETRO)           ,
 control <- trainControl(method="repeatedcv", number=4, repeats=4)
 
 #-----------------------------------------------------------------------#
-#---              Passo 02: Tratamento das variáveis                 ---#
+#---              Passo 02: Treinamento do PETRO_PETRO               ---#
 #-----------------------------------------------------------------------#
 
 # CART
 set.seed(7)
-fit.cart <- train( PETRO_PETRO ~ ANO + GRANDE_AREA + VINCULO + IDADE_ACADEMICA + DIRECAO + NOTA_CAPES + SEXO, 
-                   data=petrox , method="rpart", trControl=control)
-
-#CONTINENTE,'LOCAL_FORMAC','UF_NASC','DEDICACAO','UF_PROF','',''
+fit.cart <- train( PETRO_PETRO ~ UF_NASCN+LOCAL_FORMACN+GRANDE_AREAN+DIRECAO+SEXON+ 
+                                 VINCULON+LN_IDADE+LN_COAUTOR+LN_LOC_TRAB+LN_CAPES , 
+                                 data=estaticos2,method="rpart",trControl=control)
 
 
 # LDA
 set.seed(7)
-fit.lda <- train(diabetes~. , data=petrox , method="lda", trControl=control)
+fit.lda <- train( PETRO_PETRO ~ UF_NASCN+LOCAL_FORMACN+GRANDE_AREAN+DIRECAO+SEXON + 
+                                VINCULON+LN_IDADE+LN_COAUTOR+LN_LOC_TRAB+LN_CAPES , 
+                                data=estaticos2,method="lda",trControl=control)
+
+
 # SVM
 set.seed(7)
-fit.svm <- train(diabetes~. , data=petrox , method="svmRadial", trControl=control)
+fit.svm <- train( PETRO_PETRO ~ UF_NASCN+LOCAL_FORMACN+GRANDE_AREAN+DIRECAO+SEXON + 
+                                VINCULON+LN_IDADE+LN_COAUTOR+LN_LOC_TRAB+LN_CAPES , 
+                                data=estaticos2,method="svmRadial",trControl=control)
+
 # kNN
 set.seed(7)
-fit.knn <- train(diabetes~. , data=petrox , method="knn", trControl=control)
+fit.knn <- train( PETRO_PETRO ~ UF_NASCN+LOCAL_FORMACN+GRANDE_AREAN+DIRECAO+SEXON + 
+                                VINCULON+LN_IDADE+LN_COAUTOR+LN_LOC_TRAB+LN_CAPES , 
+                                data=estaticos2,method="knn",trControl=control)
+
+
 # Random Forest
 set.seed(7)
-fit.rf <- train(diabetes~.  , data=petrox , method="rf", trControl=control)
+fit.rf <- train( PETRO_PETRO ~ UF_NASCN+LOCAL_FORMACN+GRANDE_AREAN+DIRECAO+SEXON + 
+                               VINCULON+LN_IDADE+LN_COAUTOR+LN_LOC_TRAB+LN_CAPES , 
+                                data=estaticos2,method="rf",trControl=control)
+
+
+
 # collect resamples
 results <- resamples(list(CART=fit.cart, LDA=fit.lda, SVM=fit.svm, KNN=fit.knn, RF=fit.rf))
 
 
 
 
+#-----------------------------------------------------------------------#
+#---              Passo 02: Treinamento do PETRO_LATTES               ---#
+#-----------------------------------------------------------------------#
 
+# CART
+set.seedPETRO_LATTES
+fit.cart <- train( PETRO_PETRO ~ UF_NASCN+LOCAL_FORMACN+GRANDE_AREAN+DIRECAO+SEXON+ 
+                     VINCULON+LN_IDADE+LN_COAUTOR+LN_LOC_TRAB+LN_CAPES , 
+                   data=estaticos2,method="rpart",trControl=control)
+
+#PETRO_LATTES,CENPES_LATTES,PETRO_LAB,CENPES_LATTES,ANP_LATTES,ANP_ANP,
 
 #---------------------------------------------------------------------------------#
 #--                      Difference-in-Differences                              --#
