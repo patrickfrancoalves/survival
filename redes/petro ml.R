@@ -13,7 +13,7 @@ library(haven)
 
 remove(AI_CENPES_LATTES,AI_PETRO_PETRO,AI_PETRO_LATTES,df,DICT,
        example.df,example.df1,TRAT_CENPES_LATTES,TRAT_PETRO_PETRO,
-       TRAT_PETRO_LATTES,dicion,x,fn)
+       TRAT_PETRO_LATTES,dicion,x,fn,digitsByRows)
 
 #-----------------------------------------------------------------------#
 #---              Passo 01: ConexÃ£o ODBC com servidor                ---#

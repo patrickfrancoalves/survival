@@ -1,5 +1,5 @@
 #remove(nodes_d3,per_route) 
-#rm(list = ls()) 
+rm(list = ls()) 
 library(igraph) 
 library(dplyr)
 library(tidyverse)
