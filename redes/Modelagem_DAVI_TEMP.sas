@@ -2,7 +2,7 @@
 /*--- Criando dois níveis de tratamento ---*/
 libname rais     "\\sbsb2\DPTI\Bases\Rais\New";
 libname bndes    "\\sbsb2\DPTI\Bases\BNDES\New";
-libname exp      "\\sbsb2\dpti\Bases\Secex\New\Exportação";
+libname xexp     "\\sbsb2\dpti\Bases\Secex\New\Exportação";
 libname imp      "\\sbsb2\dpti\Bases\Secex\New\Importação";
 libname bacen    "\\sbsb2\dpti\Bases\BANCO CENTRAL\Bases";
 libname patentes "\\sbsb2\DIEST\Microdados Estatistica\PATENTES";
